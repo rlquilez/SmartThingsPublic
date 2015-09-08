@@ -41,7 +41,7 @@ preferences{
     }
     section( "Notificações" ) {
 		input "sendPushMessage", "enum", title: "Enviar notificações de push?", metadata:[values:["Yes", "No"]], required: false
-		input "phoneNumber", "phone", title: "Insira o número de celular para enviar mensagem de SMS.", required: false
+		input "phoneNumber", "phone", title: "Insira o número de celular que receberá mensagem texto", required: false
 	}
 }
 

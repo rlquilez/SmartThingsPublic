@@ -33,6 +33,12 @@ preferences {
 	section("Destancar as fechaduras..."){
 		input "lock1", "capability.lock", title: "Fechaduras?", multiple: true
 	}
+    section( "Notificações" ) {
+    input("recipients", "contact", title: "Enviar notificações para") {
+        input "sendPushMessage", "enum", title: "Enviar notificações de push?", options: ["Sim", "Não"], required: false
+        input "phoneNumber", "phone", title: "Insira o número de celular que receberá mensagem texto", required: false
+    	}
+	}
 }
 
 def installed()
@@ -50,7 +56,27 @@ def presence(evt)
 {
 	def anyLocked = lock1.count{it.currentLock == "unlocked"} != lock1.size()
 	if (anyLocked) {
-		sendPush "Destrancada porta devido a chegada de $evt.displayName"
+		send "Destrancada porta devido a chegada de $evt.displayName"
 		lock1.unlock()
 	}
+}
+
+private send(msg) {
+    if (location.contactBookEnabled) {
+        log.debug("Enviando notificação para: ${recipients?.size()}")
+        sendNotificationToContacts(msg, recipients)
+    }
+    else {
+        if (sendPushMessage != "Não") {
+            log.debug("Enviando mensagem de push")
+            sendPush(msg)
+        }
+
+        if (phoneNumber) {
+            log.debug("Enviando mensagem de texto")
+            sendSms(phoneNumber, msg)
+        }
+    }
+
+	log.debug msg
 }

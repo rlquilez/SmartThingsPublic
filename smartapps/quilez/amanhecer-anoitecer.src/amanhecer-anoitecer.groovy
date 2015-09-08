@@ -51,7 +51,7 @@ preferences {
 	section( "Notificações" ) {
         input("recipients", "contact", title: "Enviar notificações para") {
             input "sendPushMessage", "enum", title: "Enviar notificações de push?", options: ["Yes", "No"], required: false
-            input "phoneNumber", "phone", title: "Insira o número de celular para enviar mensagem de SMS.", required: false
+            input "phoneNumber", "phone", title: "Insira o número de celular que receberá mensagem texto", required: false
         }
 	}
 
@@ -176,7 +176,7 @@ private send(msg) {
 }
 
 private getLabel() {
-	app.label ?: "SmartThings"
+	app.label ?: "Amanhacer/Anoitecer"
 }
 
 private getSunriseOffset() {
