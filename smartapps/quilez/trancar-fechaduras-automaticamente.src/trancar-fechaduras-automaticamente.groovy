@@ -64,21 +64,22 @@ def initialize(){
 }
 
 def lockDoor(){
-    log.debug "Locking the door."
+    log.debug "Trancando porta."
     lock1.lock()
-    log.debug ( "Sending Push Notification..." ) 
-    if ( sendPushMessage == "Yes" ) sendPush( "${sendPushMessage} ${lock1} locked after ${contact} was closed for ${minutesLater} minutes!!" )
-    log.debug("Sending text message...")
-    if ( phoneNumber != "0" ) sendSms( phoneNumber, "${lock1} locked after ${contact} was closed for ${minutesLater} minutes!" )
+    log.debug ( "Enviando notificação de push..." ) 
+    //if ( sendPushMessage == "Yes" ) sendPush( "${lock1} locked after ${contact} was closed for ${minutesLater} minutes!!" )
+    if ( sendPushMessage == "Yes" ) sendPush( "${lock1} trancada depois de ${contact} fechada por ${minutesLater} minutos!" )
+    log.debug("Enviando mensagem de texto...")
+    if ( phoneNumber ) sendSms( phoneNumber, "${lock1} trancada depois de ${contact} fechada por ${minutesLater} minutos!" )
 }
 
 def unlockDoor(){
-    log.debug "Unlocking the door."
+    log.debug "Destrancando porta."
     lock1.unlock()
-    log.debug ( "Sending Push Notification..." ) 
-    if ( sendPushMessage == "Yes" ) sendPush( "${lock1} unlocked after ${contact} was opened for ${secondsLater} seconds!" )
-    log.debug("Sending text message...")
-    if ( phoneNumber != "0" ) sendSms( phoneNumber, "${lock1} unlocked after ${contact} was opened for ${secondsLater} seconds!" )
+    log.debug ( "Enviando Notificação de Push..." ) 
+    if ( sendPushMessage == "Yes" ) sendPush( "${lock1} destrancada despois de ${contact} aberto por ${secondsLater} segundos!" )
+    log.debug("Enviando mensagem de texto...")
+    if ( phoneNumber ) sendSms( phoneNumber, "${lock1} destrancada despois de ${contact} aberto por ${secondsLater} segundos!" )
 }
 
 def doorHandler(evt){
@@ -104,12 +105,12 @@ def doorHandler(evt){
         runIn( delay, lockDoor ) // ...schedule (in minutes) to lock.
 	}
     else { //Opening or Closing door when locked (in case you have a handle lock)
-    	log.debug "Unlocking the door."
-		lock1.unlock()
-        log.debug ( "Sending Push Notification..." ) 
-        //sendNotificationEvent("Fechadura destravada temporariamente")
-    	if ( sendPushMessage == "Yes" ) sendPush( "${lock1} unlocked after ${contact} was opened or closed when ${lock1} was locked!" )
-        log.debug("Sending text message...")
-    	if ( phoneNumber != "0" ) sendSms( phoneNumber, "${lock1} unlocked after ${contact} was opened or closed when ${lock1} was locked!" )
+    	//log.debug "Unlocking the door."
+		//lock1.unlock()
+        //log.debug ( "Sending Push Notification..." ) 
+        ////sendNotificationEvent("Fechadura destravada temporariamente")
+    	//if ( sendPushMessage == "Yes" ) sendPush( "${lock1} unlocked after ${contact} was opened or closed when ${lock1} was locked!" )
+        //log.debug("Sending text message...")
+    	//if ( phoneNumber ) sendSms( phoneNumber, "${lock1} unlocked after ${contact} was opened or closed when ${lock1} was locked!" )
 		}
 }
