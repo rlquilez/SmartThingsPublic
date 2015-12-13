@@ -40,7 +40,7 @@ preferences{
         input "secondsLater", "number", title: "Delay (in seconds):", required: true
     }
     section( "Notificações" ) {
-		input "sendPushMessage", "enum", title: "Enviar notificações de push?", metadata:[values:["Yes", "No"]], required: false
+		input "sendPushMessage", "enum", title: "Enviar notificações de push?", metadata:[values:["Yes", "No"]], required: true
 		input "phoneNumber", "phone", title: "Insira o número de celular que receberá mensagem texto", required: false
 	}
 }
@@ -67,7 +67,7 @@ def lockDoor(){
     log.debug "Locking the door."
     lock1.lock()
     log.debug ( "Sending Push Notification..." ) 
-    if ( sendPushMessage != "No" ) sendPush( "${lock1} locked after ${contact} was closed for ${minutesLater} minutes!" )
+    if ( sendPushMessage == "Yes" ) sendPush( "${sendPushMessage} ${lock1} locked after ${contact} was closed for ${minutesLater} minutes!!" )
     log.debug("Sending text message...")
     if ( phoneNumber != "0" ) sendSms( phoneNumber, "${lock1} locked after ${contact} was closed for ${minutesLater} minutes!" )
 }
@@ -76,7 +76,7 @@ def unlockDoor(){
     log.debug "Unlocking the door."
     lock1.unlock()
     log.debug ( "Sending Push Notification..." ) 
-    if ( sendPushMessage != "No" ) sendPush( "${lock1} unlocked after ${contact} was opened for ${secondsLater} seconds!" )
+    if ( sendPushMessage == "Yes" ) sendPush( "${lock1} unlocked after ${contact} was opened for ${secondsLater} seconds!" )
     log.debug("Sending text message...")
     if ( phoneNumber != "0" ) sendSms( phoneNumber, "${lock1} unlocked after ${contact} was opened for ${secondsLater} seconds!" )
 }
@@ -107,7 +107,8 @@ def doorHandler(evt){
     	log.debug "Unlocking the door."
 		lock1.unlock()
         log.debug ( "Sending Push Notification..." ) 
-    	if ( sendPushMessage != "No" ) sendPush( "${lock1} unlocked after ${contact} was opened or closed when ${lock1} was locked!" )
+        //sendNotificationEvent("Fechadura destravada temporariamente")
+    	if ( sendPushMessage == "Yes" ) sendPush( "${lock1} unlocked after ${contact} was opened or closed when ${lock1} was locked!" )
         log.debug("Sending text message...")
     	if ( phoneNumber != "0" ) sendSms( phoneNumber, "${lock1} unlocked after ${contact} was opened or closed when ${lock1} was locked!" )
 		}
